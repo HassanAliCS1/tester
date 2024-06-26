@@ -22,7 +22,7 @@ public class QuranTesterController {
 
     @GetMapping("/get-ayah")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<AyahResponseDTO> getAyah(String juzNumber){
+    public Mono<AyahResponseDTO> getAyah(int juzNumber){
         log.warn("QuranTesterController hit: "+ juzNumber);
         return svc.getAyah(juzNumber);
     }
