@@ -1,0 +1,28 @@
+<included>
+    <appender name="syncJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>spanId</includeMdcKeyName>
+            <includeMdcKeyName>dd.trace_id</includeMdcKeyName>
+            <includeMdcKeyName>dd.span_id</includeMdcKeyName>
+            <fieldNames>
+                <version>[ignore]</version>
+                <thread>[ignore]</thread>
+            </fieldNames>
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                <maxDepthPerThrowable>12</maxDepthPerThrowable>
+                <shortenedClassNameLength>20</shortenedClassNameLength>
+                <inlineHash>true</inlineHash>
+                <maxLength>15000</maxLength>
+                <rootCauseFirst>true</rootCauseFirst>
+                <exclude>^org\.springframework\.</exclude>
+                <exclude>^reactor\.core\.</exclude>
+            </throwableConverter>
+        </encoder>
+    </appender>
+    <appender name="jsonConsoleAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="syncJsonConsoleAppender" />
+        <neverBlock>true</neverBlock>
+    </appender>
+</included>
