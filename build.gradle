@@ -50,7 +50,7 @@ dependencies {
 
 sonar {
 	properties {
-		property "sonar.projectKey", "tester"
+		property "sonar.projectKey", "HassanAliCS1_tester"
 		property "sonar.organization", "hassanalics1"
 		property "sonar.host.url", "https://sonarcloud.io"
 		property "sonar.coverage.jacoco.xmlReportPaths","build/reports/jacoco/test/jacocoTestReport.xml"
