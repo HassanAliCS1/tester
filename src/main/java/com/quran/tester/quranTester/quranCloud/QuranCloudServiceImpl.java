@@ -18,7 +18,7 @@ public class QuranCloudServiceImpl implements QuranCloudService{
         log.warn("QuranCloudServiceImpl hit: " + ayahNumber);
         return quranCloudWebClient
                 .get()
-                .uri("/v1/ayah/" + ayahNumber)
+                .uri("/v1/ayah/" + ayahNumber + "/ar.alafasy")
                 .retrieve()
                 .bodyToMono(AyahResponseDTO.class)
                 .doOnError(x -> log.error("Error -> " + x));
