@@ -40,13 +40,6 @@ test {
 			"-XX:+EnableDynamicAgentLoading"
 	]
 
-	testlogger {
-		showStandardStreams = true
-		showPassedStandardStreams = false
-		showSkippedStandardStreams = false
-		showFailedStandardStreams = true
-	}
-
 	finalizedBy jacocoTestReport
 }
 
