@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: tester
+  profiles:
+    default: local
+
+logging:
+  level:
+    root: WARN
+    com.quran: INFO
+    org.zalando.logbook.Logbook: TRACE
+
+tester:
+  security:
+    user-password: ${USER_PASSWORD}
+    admin-password: ${ADMIN_PASSWORD}
+
+management:
+  datadog:
+    metrics:
+      export:
+        enabled: false
+
+quran-tester:
+  quran-cloud:
+    url: ${QURAN_CLOUD_URL}
+

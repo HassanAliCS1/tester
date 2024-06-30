@@ -1,0 +1,25 @@
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProfile name="default,local">
+        <include resource="logback-stdout-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="staging,uat">
+        <include resource="logback-json-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="production">
+        <include resource="logback-json-appender.xml"/>
+        <root level="WARN">
+            <appender-ref ref="jsonConsoleAppender"/>
+        </root>
+    </springProfile>
+
+</configuration>

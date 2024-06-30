@@ -15,6 +15,10 @@ java {
 	}
 }
 
+jacoco {
+	toolVersion = "0.8.11"
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -25,42 +29,75 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+tasks.withType(JavaCompile).each {
+	it.options.compilerArgs.add('--enable-preview')}
+
+test {
+	useJUnitPlatform()
+
+	jvmArgs = [
+			"--enable-preview",
+			"-XX:+EnableDynamicAgentLoading"
+	]
+
+	finalizedBy jacocoTestReport
 }
 
 sonar {
 	properties {
-		property "sonar.projectKey", "HassanAliCS1_TradingApi"
+		property "sonar.projectKey", "HassanAliCS1_tester"
 		property "sonar.organization", "hassanalics1"
 		property "sonar.host.url", "https://sonarcloud.io"
 		property "sonar.coverage.jacoco.xmlReportPaths","build/reports/jacoco/test/jacocoTestReport.xml"
-	}
-}
+		property "sonar.sources", "src/main"
+		property "sonar.tests", "src/test"
 
-jacoco {
-	toolVersion = "0.8.11"
+		if (System.getenv("GITHUB_PR_NUMBER") != null) {
+			property "sonar.pullrequest.key", System.getenv("GITHUB_PR_NUMBER")
+			property "sonar.pullrequest.branch", System.getenv("GITHUB_HEAD_REF")
+			property "sonar.pullrequest.base", System.getenv("GITHUB_BASE_REF")
+		}
+	}
 }
 
 jacocoTestReport {
-	dependsOn test // tests are required to run before generating the report
-
-
+	dependsOn test
 	reports {
 		xml.required = true
+		csv.required = false
+		html.required = false
 	}
 }
 
-test {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.zalando:logbook-logstash:3.9.0'
+	implementation 'org.zalando:logbook-netty:3.9.0'
+	implementation 'org.zalando:logbook-spring-webflux:3.9.0'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave:1.2.5'
+
+	if ("Mac OS X" == System.getProperty("os.name") && "aarch64" == System.getProperty("os.arch")) {
+		String macosNettyDns = "4.1.109.Final"
+		implementation("io.netty:netty-resolver-dns-native-macos:$macosNettyDns:osx-aarch_64")
+	}
+
+    compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.14'
+	testImplementation 'com.squareup.okhttp3:mockwebserver3:5.0.0-alpha.14'
+	testImplementation 'com.squareup.okhttp3:mockwebserver3-junit5:5.0.0-alpha.14'
+	testImplementation 'org.projectlombok:lombok:1.18.28'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+
