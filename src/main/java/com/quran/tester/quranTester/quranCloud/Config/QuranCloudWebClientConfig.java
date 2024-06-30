@@ -23,20 +23,13 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 @Configuration
 public class QuranCloudWebClientConfig {
 
-
     @Bean
-    public BodyFilter jsonFormatBodyFilter(Environment env) {
-        return env.getActiveProfiles()[0].equals("local") ?
-                new PrettyPrintingJsonBodyFilter() : BodyFilters.defaultValue();
-    }
-
-    @Bean
-    public Logbook logbookQuranCloud(CorrelationId correlationId, Sink sink,BodyFilter jsonFormatBodyFilter) {
+    public Logbook logbookQuranCloud(CorrelationId correlationId, Sink sink) {
         return Logbook.builder()
                 .sink(sink)
                 .correlationId(correlationId)
                 .headerFilter(headers -> HttpHeaders.empty())
-                .bodyFilter(jsonFormatBodyFilter)
+                .bodyFilter(new PrettyPrintingJsonBodyFilter())
                 .build();
     }
 
