@@ -45,6 +45,6 @@ jobs:
         if: always()
         with:
           name: Test Report
-          path: tester/build/test-results/**/TEST-*.xml
+          path: build/test-results/**/TEST-*.xml
           reporter: java-junit
           output-to: checks
