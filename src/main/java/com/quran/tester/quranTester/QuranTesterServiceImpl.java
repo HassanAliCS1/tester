@@ -15,6 +15,7 @@ import java.util.Random;
 public class QuranTesterServiceImpl implements QuranTesterService {
 
     private final QuranCloudService svc;
+    private Random random = new Random();
 
     public QuranTesterServiceImpl(QuranCloudService svc) {
         this.svc = svc;
@@ -32,7 +33,6 @@ public class QuranTesterServiceImpl implements QuranTesterService {
     }
 
     private int getRandomNumberUsingNextInt(int min, int max) {
-        Random random = new Random();
         return random.nextInt(max - min) + min;
         //TODO: Tech Debt: Some problems: 1.Can pick last ayah of Juz (Not good).  2.Can pick Ayahs like حمۤ (Not Good)
     }
