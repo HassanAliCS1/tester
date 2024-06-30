@@ -30,55 +30,53 @@ repositories {
 }
 
 tasks.withType(JavaCompile).each {
-	it.options.compilerArgs.add('--enable-preview')
+	it.options.compilerArgs.add('--enable-preview')}
 
-tasks {
+test {
+	useJUnitPlatform()
 
-	test {
-		useJUnitPlatform()
+	jvmArgs = [
+			"--enable-preview",
+			"-XX:+EnableDynamicAgentLoading"
+	]
 
-		jvmArgs = [
-				"--enable-preview",
-				"-XX:+EnableDynamicAgentLoading"
-		]
-
-		testlogger {
-			showStandardStreams = true
-			showPassedStandardStreams = false
-			showSkippedStandardStreams = false
-			showFailedStandardStreams = true
-		}
-
-		finalizedBy jacocoTestReport
+	testlogger {
+		showStandardStreams = true
+		showPassedStandardStreams = false
+		showSkippedStandardStreams = false
+		showFailedStandardStreams = true
 	}
 
+	finalizedBy jacocoTestReport
+}
 
-	sonar {
-		properties {
-			property "sonar.projectKey", "HassanAliCS1_tester"
-			property "sonar.organization", "hassanalics1"
-			property "sonar.host.url", "https://sonarcloud.io"
-			property "sonar.coverage.jacoco.xmlReportPaths","build/reports/jacoco/test/jacocoTestReport.xml"
-			property "sonar.sources", "src/main"
-			property "sonar.tests", "src/test"
+sonar {
+	properties {
+		property "sonar.projectKey", "HassanAliCS1_tester"
+		property "sonar.organization", "hassanalics1"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.coverage.jacoco.xmlReportPaths","build/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.sources", "src/main"
+		property "sonar.tests", "src/test"
 
-			if (System.getenv("GITHUB_PR_NUMBER") != null) {
-				property "sonar.pullrequest.key", System.getenv("GITHUB_PR_NUMBER")
-				property "sonar.pullrequest.branch", System.getenv("GITHUB_HEAD_REF")
-				property "sonar.pullrequest.base", System.getenv("GITHUB_BASE_REF")
-			}
-		}
-	}
-
-	jacocoTestReport {
-		dependsOn test
-		reports {
-			xml.required = true
-			csv.required = false
-			html.required = false
+		if (System.getenv("GITHUB_PR_NUMBER") != null) {
+			property "sonar.pullrequest.key", System.getenv("GITHUB_PR_NUMBER")
+			property "sonar.pullrequest.branch", System.getenv("GITHUB_HEAD_REF")
+			property "sonar.pullrequest.base", System.getenv("GITHUB_BASE_REF")
 		}
 	}
 }
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		csv.required = false
+		html.required = false
+	}
+}
+
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
