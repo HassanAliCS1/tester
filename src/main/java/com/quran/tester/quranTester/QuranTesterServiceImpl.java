@@ -15,7 +15,7 @@ import java.util.Random;
 public class QuranTesterServiceImpl implements QuranTesterService {
 
     private final QuranCloudService svc;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public QuranTesterServiceImpl(QuranCloudService svc) {
         this.svc = svc;
