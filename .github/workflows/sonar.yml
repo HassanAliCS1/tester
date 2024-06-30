@@ -42,9 +42,10 @@ jobs:
 
       - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build jacocoTestReport sonar --info
+          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: ./gradlew build sonar --info
 
       - name: Test Report
         uses: phoenix-actions/test-reporting@v10
