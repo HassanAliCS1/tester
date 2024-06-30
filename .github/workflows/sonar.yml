@@ -26,10 +26,12 @@ jobs:
           java-version: 21
           distribution: corretto
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
         with:
-          gradle-home-cache-cleanup: true
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
 
       - name: Build and analyze
         env:
