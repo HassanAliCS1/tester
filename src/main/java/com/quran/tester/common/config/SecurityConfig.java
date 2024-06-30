@@ -1,6 +1,7 @@
 package com.quran.tester.common.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -16,17 +17,24 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+    private final String userPassword;
+    private final String adminPassword;
 
-    //TODO: fix this Move password to env
+    public SecurityConfig(@Value("${tester.security.user-password") String userPassword,
+                          @Value("${tester.security.user-password") String adminPassword) {
+        this.adminPassword = adminPassword;
+        this.userPassword = userPassword;
+    }
+
     @Bean
     public MapReactiveUserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
+                .password(passwordEncoder.encode(userPassword))
                 .roles("USER")
                 .build();
 
         UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
+                .password(passwordEncoder.encode(adminPassword))
                 .roles("USER", "ADMIN")
                 .build();
 

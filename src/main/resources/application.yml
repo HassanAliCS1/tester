@@ -10,6 +10,11 @@ logging:
     com.quran: INFO
     org.zalando.logbook.Logbook: TRACE
 
+tester:
+  security:
+    user-password: ${USER_PASSWORD}
+    admin-password: ${ADMIN_PASSWORD}
+
 management:
   datadog:
     metrics:
@@ -18,5 +23,5 @@ management:
 
 quran-tester:
   quran-cloud:
-    url: http://api.alquran.cloud
+    url: ${QURAN_CLOUD_URL}
 
