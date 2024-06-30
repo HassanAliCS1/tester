@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Slf4j
@@ -24,9 +25,9 @@ public class QuranTesterServiceImpl implements QuranTesterService {
     @Override
     public Mono<AyahResponseDTO> getAyah(int juzNumber) {
         //TODO: should this be webflux? (Find an optimal way of getAyahsFromJuz logic with webflux maybe)
-        List<Integer> resp = getAyahsFromJuz(juzNumber);
-        int minAyah = resp.getFirst();
-        int maxAyah = resp.getLast();
+        Integer[] resp = getAyahsFromJuz(juzNumber);
+        int minAyah = resp[0];
+        int maxAyah = resp[1];
         int ayahNumber = getRandomNumberUsingNextInt(minAyah, maxAyah);
 
         return svc.getAyah(String.valueOf(ayahNumber));
@@ -38,138 +39,54 @@ public class QuranTesterServiceImpl implements QuranTesterService {
     }
 
     //TODO: is this optimal ? Find better way. while making getAyah method webflux
-    public List<Integer> getAyahsFromJuz(int juz){
-        List<Integer> ayahs = new ArrayList<>();
-
-        switch (juz){
-            case 1:
-                ayahs.add(0,1);
-                ayahs.add(1,148);
-                break;
-            case 2:
-                ayahs.add(0,149);
-                ayahs.add(1,259);
-                break;
-            case 3:
-                ayahs.add(0,260);
-                ayahs.add(1,385);
-                break;
-            case 4:
-                ayahs.add(0,386);
-                ayahs.add(1,516);
-                break;
-            case 5:
-                ayahs.add(0,517);
-                ayahs.add(1,640);
-                break;
-            case 6:
-                ayahs.add(0,641);
-                ayahs.add(1,750);
-                break;
-            case 7:
-                ayahs.add(0,751);
-                ayahs.add(1,899);
-                break;
-            case 8:
-                ayahs.add(0,900);
-                ayahs.add(1,1041);
-                break;
-            case 9:
-                ayahs.add(0,1042);
-                ayahs.add(1,1200);
-                break;
-            case 10:
-                ayahs.add(0,1201);
-                ayahs.add(1,1327);
-                break;
-            case 11:
-                ayahs.add(0,1328);
-                ayahs.add(1,1478);
-                break;
-            case 12:
-                ayahs.add(0,1479);
-                ayahs.add(1,1648);
-                break;
-
-            case 13:
-                ayahs.add(0,1649);
-                ayahs.add(1,1802);
-                break;
-            case 14:
-                ayahs.add(0,1803);
-                ayahs.add(1,2029);
-                break;
-            case 15:
-                ayahs.add(0,2030);
-                ayahs.add(1,2214);
-                break;
-            case 16:
-                ayahs.add(0,2215);
-                ayahs.add(1,2483);
-                break;
-            case 17:
-                ayahs.add(0,2484);
-                ayahs.add(1,2673);
-                break;
-            case 18:
-                ayahs.add(0,2674);
-                ayahs.add(1,2875);
-                break;
-            case 19:
-                ayahs.add(0,2876);
-                ayahs.add(1,3214);
-                break;
-            case 20:
-                ayahs.add(0,3215);
-                ayahs.add(1,3385);
-                break;
-            case 21:
-                ayahs.add(0,3386);
-                ayahs.add(1,3563);
-                break;
-            case 22:
-                ayahs.add(0,3564);
-                ayahs.add(1,3732);
-                break;
-            case 23:
-                ayahs.add(0,3733);
-                ayahs.add(1,4089);
-                break;
-            case 24:
-                ayahs.add(0,4090);
-                ayahs.add(1,4264);
-                break;
-            case 25:
-                ayahs.add(0,4265);
-                ayahs.add(1,4510);
-                break;
-            case 26:
-                ayahs.add(0,4511);
-                ayahs.add(1,4705);
-                break;
-            case 27:
-                ayahs.add(0,4706);
-                ayahs.add(1,5104);
-                break;
-            case 28:
-                ayahs.add(0,5105);
-                ayahs.add(1,5241);
-                break;
-            case 29:
-                ayahs.add(0,5242);
-                ayahs.add(1,5672);
-                break;
-            case 30:
-                ayahs.add(0,5673);
-                ayahs.add(1,6236);
-                break;
-            default:
-                ayahs.add(0,1);
-                ayahs.add(1,6236);
-                break;
+    private Integer[] getAyahsFromJuz(int juz){
+        if (juz >= 1 && juz <= 10){
+            return ayahRangeOneLookUp.get(juz);
         }
-        //TODO: add a default case: error ^ replace that
-
-        return ayahs;
+        else if (juz >= 11 && juz <= 20){
+            return ayahRangeTwoLookUp.get(juz);
+        }
+        else if (juz >= 21 && juz <= 30){
+            return ayahRangeThreeLookUp.get(juz);
+        }
+        return null;
     }
+
+    static Map<Integer, Integer[]> ayahRangeOneLookUp = Map.of(
+            1, new Integer[]{1, 148},
+            2, new Integer[]{149,259},
+            3, new Integer[]{260,385},
+            4, new Integer[]{386,516},
+            5, new Integer[]{517,640},
+            6, new Integer[]{641,750},
+            7, new Integer[]{751,899},
+            8, new Integer[]{900,1041},
+            9, new Integer[]{1042,1200},
+            10, new Integer[]{1201,1327}
+    );
+    static Map<Integer, Integer[]> ayahRangeTwoLookUp = Map.of(
+            11, new Integer[]{1328,1478},
+            12, new Integer[]{1479,1648},
+            13, new Integer[]{1649,1802},
+            14, new Integer[]{1803,2029},
+            15, new Integer[]{2030,2214},
+            16, new Integer[]{2215,2483},
+            17, new Integer[]{2484,2673},
+            18, new Integer[]{2674,2875},
+            19, new Integer[]{2876,3214},
+            20, new Integer[]{3215,3385}
+    );
+
+    static Map<Integer, Integer[]> ayahRangeThreeLookUp = Map.of(
+            21, new Integer[]{3386,3563},
+            22, new Integer[]{3564,3732},
+            23, new Integer[]{3733,4089},
+            24, new Integer[]{4090,4264},
+            25, new Integer[]{4265,4510},
+            26, new Integer[]{4511,4705},
+            27, new Integer[]{4706,5104},
+            28, new Integer[]{5105,5241},
+            29, new Integer[]{5242,5672},
+            30, new Integer[]{5673,6236}
+    );
 }
