@@ -15,7 +15,6 @@ public class QuranCloudServiceImpl implements QuranCloudService{
 
     @Override
     public Mono<AyahResponseDTO> getAyah(String ayahNumber) {
-        log.warn("QuranCloudServiceImpl hit: " + ayahNumber);
         return quranCloudWebClient
                 .get()
                 .uri("/v1/ayah/" + ayahNumber + "/ar.alafasy")

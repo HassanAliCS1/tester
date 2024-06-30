@@ -36,9 +36,6 @@ import reactor.netty.Metrics;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static org.zalando.logbook.core.Conditions.*;
-import static org.zalando.logbook.core.Conditions.requestTo;
-
 @Configuration
 @RequiredArgsConstructor
 public class TracingConfig {

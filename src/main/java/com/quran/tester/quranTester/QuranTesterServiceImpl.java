@@ -14,7 +14,7 @@ import java.util.Random;
 @Service
 public class QuranTesterServiceImpl implements QuranTesterService {
 
-    private QuranCloudService svc;
+    private final QuranCloudService svc;
 
     public QuranTesterServiceImpl(QuranCloudService svc) {
         this.svc = svc;
@@ -38,7 +38,7 @@ public class QuranTesterServiceImpl implements QuranTesterService {
     }
 
     //TODO: is this optimal ? Find better way. while making getAyah method webflux
-    private List<Integer> getAyahsFromJuz(int juz){
+    public List<Integer> getAyahsFromJuz(int juz){
         List<Integer> ayahs = new ArrayList<>();
 
         switch (juz){
@@ -163,7 +163,12 @@ public class QuranTesterServiceImpl implements QuranTesterService {
                 ayahs.add(0,5673);
                 ayahs.add(1,6236);
                 break;
+            default:
+                ayahs.add(0,1);
+                ayahs.add(1,6236);
+                break;
         }
+        //TODO: add a default case: error ^ replace that
 
         return ayahs;
     }
