@@ -29,13 +29,10 @@ repositories {
 	mavenCentral()
 }
 
+tasks.withType(JavaCompile).each {
+	it.options.compilerArgs.add('--enable-preview')
+
 tasks {
-	withType(JavaCompile).each{
-		options.compilerArgs.add("--enable-preview")
-	}
-	withType(JavaExec).each{
-		jvmArgs = listOf("--enable-preview")
-	}
 
 	test {
 		useJUnitPlatform()
