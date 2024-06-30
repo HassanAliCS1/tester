@@ -26,6 +26,7 @@ public class QuranTesterServiceImpl implements QuranTesterService {
     public Mono<AyahResponseDTO> getAyah(int juzNumber) {
         //TODO: should this be webflux? (Find an optimal way of getAyahsFromJuz logic with webflux maybe)
         Integer[] resp = getAyahsFromJuz(juzNumber);
+        assert resp != null;
         int minAyah = resp[0];
         int maxAyah = resp[1];
         int ayahNumber = getRandomNumberUsingNextInt(minAyah, maxAyah);
@@ -49,7 +50,7 @@ public class QuranTesterServiceImpl implements QuranTesterService {
         else if (juz >= 21 && juz <= 30){
             return ayahRangeThreeLookUp.get(juz);
         }
-        return null;
+        return new Integer[0];
     }
 
     static Map<Integer, Integer[]> ayahRangeOneLookUp = Map.of(
