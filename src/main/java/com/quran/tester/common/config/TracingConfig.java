@@ -79,8 +79,8 @@ public class TracingConfig {
         return Logbook.builder()
                 .sink(sink)
                 .correlationId(correlationId)
-                .headerFilter(_ -> HttpHeaders.empty())
-                .bodyFilter((_, _) -> Strings.EMPTY)
+                .headerFilter(headers -> HttpHeaders.empty())
+                .bodyFilter((contentType, body) -> Strings.EMPTY)
                 .build();
     }
 
@@ -106,7 +106,7 @@ public class TracingConfig {
                             .ifPresent(span -> MDC.put("dd.trace_id", span.context().traceId()));
 
                     return ctx;
-                }).doFinally(_ -> MDC.remove("dd.trace_id"));
+                }).doFinally(x -> MDC.remove("dd.trace_id"));
     }
 
     @RequiredArgsConstructor
@@ -118,7 +118,7 @@ public class TracingConfig {
         @Override
         @SneakyThrows
         public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) {
-            try (var _ = contextSnapshotFactory.setThreadLocalsFrom(ctx.channel())) {
+            try (var x = contextSnapshotFactory.setThreadLocalsFrom(ctx.channel())) {
                 delegate.channelRead(ctx, msg);
             }
         }
@@ -126,14 +126,14 @@ public class TracingConfig {
         @Override
         @SneakyThrows
         public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
-            try (var _ = contextSnapshotFactory.setThreadLocalsFrom(ctx.channel())) {
+            try (var x = contextSnapshotFactory.setThreadLocalsFrom(ctx.channel())) {
                 delegate.write(ctx, msg, promise);
             }
         }
 
         @Override
         public void flush(ChannelHandlerContext ctx) {
-            try (var _ = contextSnapshotFactory.setThreadLocalsFrom(ctx.channel())) {
+            try (var x = contextSnapshotFactory.setThreadLocalsFrom(ctx.channel())) {
                 ctx.flush();
             }
         }

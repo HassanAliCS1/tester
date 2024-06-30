@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -26,9 +24,17 @@ public class QuranTesterServiceImpl implements QuranTesterService {
     public Mono<AyahResponseDTO> getAyah(int juzNumber) {
         //TODO: should this be webflux? (Find an optimal way of getAyahsFromJuz logic with webflux maybe)
         Integer[] resp = getAyahsFromJuz(juzNumber);
-        assert resp != null;
-        int minAyah = resp[0];
-        int maxAyah = resp[1];
+        int minAyah;
+        int maxAyah;
+        if(resp.length > 0) {
+            minAyah = resp[0];
+            maxAyah = resp[1];
+        }
+        else{
+            minAyah = 1;
+            maxAyah = 6236;
+            log.error("Never got Array Value");
+        }
         int ayahNumber = getRandomNumberUsingNextInt(minAyah, maxAyah);
 
         return svc.getAyah(String.valueOf(ayahNumber));

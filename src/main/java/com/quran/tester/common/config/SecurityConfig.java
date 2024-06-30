@@ -16,6 +16,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
+    //TODO: fix this Move password to env
     @Bean
     public MapReactiveUserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("user")
