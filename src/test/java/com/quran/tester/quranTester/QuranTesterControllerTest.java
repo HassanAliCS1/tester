@@ -28,20 +28,20 @@ class QuranTesterControllerTest {
     private QuranTesterService svc;
 
     @Test
-    void getAyah(){
+    void getRandomAyah(){
         var data = new AyahDataDTO(1, "None", null,"None", null,null,1,1,1,1,1,1,false);
         var expectedResponse = new AyahResponseDTO(200,"OK", data);
 
-        when(svc.getAyah(any(Integer.class))).thenReturn(Mono.just(expectedResponse));
+        when(svc.getRandomAyah(30)).thenReturn(Mono.just(expectedResponse));
 
         client.get()
-                .uri("/quran-tester/get-ayah?juzNumber=30")
+                .uri("/quran-tester/get-random-ayah?juzNumber=30")
                 .exchange()
                 .expectBody(AyahResponseDTO.class)
                 .isEqualTo(expectedResponse);
 
-        verify(svc, times(1)).getAyah(any(Integer.class));
-        verifyGet("/quran-tester/get-ayah?juzNumber=30");
+        verify(svc, times(1)).getRandomAyah(30);
+        verifyGet("/quran-tester/get-random-ayah?juzNumber=30");
 
     }
 
