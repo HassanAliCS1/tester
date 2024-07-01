@@ -23,5 +23,5 @@ management:
 
 quran-tester:
   quran-cloud:
-    url: ${QURAN_CLOUD_URL}
+    url: http://api.alquran.cloud
 

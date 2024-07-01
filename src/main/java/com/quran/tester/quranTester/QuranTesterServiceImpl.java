@@ -14,35 +14,49 @@ import java.util.Random;
 public class QuranTesterServiceImpl implements QuranTesterService {
 
     private final QuranCloudService svc;
-    private final Random random = new Random();
+    private static final Random random = new Random();
 
     public QuranTesterServiceImpl(QuranCloudService svc) {
         this.svc = svc;
     }
 
     @Override
-    public Mono<AyahResponseDTO> getAyah(int juzNumber) {
+    public Mono<AyahResponseDTO> getRandomAyah(int juzNumber) {
         //TODO: should this be webflux? (Find an optimal way of getAyahsFromJuz logic with webflux maybe)
         Integer[] resp = getAyahsFromJuz(juzNumber);
         int minAyah;
         int maxAyah;
-        if(resp.length > 0) {
+        if (resp.length > 0) {
             minAyah = resp[0];
             maxAyah = resp[1];
-        }
-        else{
+        } else {
             minAyah = 1;
             maxAyah = 6236;
             log.error("Never got Array Value");
         }
         int ayahNumber = getRandomNumberUsingNextInt(minAyah, maxAyah);
-
         return svc.getAyah(String.valueOf(ayahNumber));
     }
 
-    private int getRandomNumberUsingNextInt(int min, int max) {
+    @Override
+    public Mono<AyahResponseDTO> getRandomAyahMultipleJuz(int[] juzNumber) {
+        int juz = getRandomNumberArray(juzNumber);
+        return getRandomAyah(juz);
+    }
+
+    @Override
+    public Mono<AyahResponseDTO> getSpecificAyah(int ayahNumber) {
+        return svc.getAyah(String.valueOf(ayahNumber));
+    }
+
+    private static int getRandomNumberUsingNextInt(int min, int max) {
         return random.nextInt(max - min) + min;
         //TODO: Tech Debt: Some problems: 1.Can pick last ayah of Juz (Not good).  2.Can pick Ayahs like حمۤ (Not Good)
+    }
+
+    public static int getRandomNumberArray(int[] array) {
+        int rnd = random.nextInt(array.length);
+        return array[rnd];
     }
 
     //TODO: is this optimal ? Find better way. while making getAyah method webflux
@@ -59,7 +73,7 @@ public class QuranTesterServiceImpl implements QuranTesterService {
         return new Integer[0];
     }
 
-    static Map<Integer, Integer[]> ayahRangeOneLookUp = Map.of(
+    private static final Map<Integer, Integer[]> ayahRangeOneLookUp = Map.of(
             1, new Integer[]{1, 148},
             2, new Integer[]{149,259},
             3, new Integer[]{260,385},
@@ -71,7 +85,7 @@ public class QuranTesterServiceImpl implements QuranTesterService {
             9, new Integer[]{1042,1200},
             10, new Integer[]{1201,1327}
     );
-    static Map<Integer, Integer[]> ayahRangeTwoLookUp = Map.of(
+    private static final Map<Integer, Integer[]> ayahRangeTwoLookUp = Map.of(
             11, new Integer[]{1328,1478},
             12, new Integer[]{1479,1648},
             13, new Integer[]{1649,1802},
@@ -84,7 +98,7 @@ public class QuranTesterServiceImpl implements QuranTesterService {
             20, new Integer[]{3215,3385}
     );
 
-    static Map<Integer, Integer[]> ayahRangeThreeLookUp = Map.of(
+    private static final Map<Integer, Integer[]> ayahRangeThreeLookUp = Map.of(
             21, new Integer[]{3386,3563},
             22, new Integer[]{3564,3732},
             23, new Integer[]{3733,4089},

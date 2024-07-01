@@ -35,7 +35,7 @@ class QuranTesterServiceTest {
     void getAyah(){
         when(quranCloudService.getAyah(any(String.class))).thenReturn(Mono.just(getAyahResponseDTO()));
 
-        StepVerifier.create(svc.getAyah(30))
+        StepVerifier.create(svc.getRandomAyah(30))
                 .expectNext(getAyahResponseDTO())
                 .verifyComplete();
 
