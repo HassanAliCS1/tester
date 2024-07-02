@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
 
-@WebFluxTest(controllers = QuranTesterController.class)
+@WebFluxTest
 @AutoConfigureWebTestClient(timeout = "60000")
 @Import({ SecurityConfig.class, TracingConfig.class })
 class QuranTesterControllerTest {

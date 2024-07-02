@@ -30,7 +30,7 @@ public class QuranTesterController {
         return svc.getRandomAyah(juzNumber);
     }
 
-    @GetMapping("/get-random-ayah-multiple-juz")
+    @GetMapping("/get-ayah-multiple-juz")
     @ResponseStatus(HttpStatus.OK)
     public Mono<AyahResponseDTO> getAyahMultipleJuz(int[] juzNumber){
         log.warn("QuranTesterController hit getAyahMultipleJuz: "+ Arrays.toString(juzNumber));

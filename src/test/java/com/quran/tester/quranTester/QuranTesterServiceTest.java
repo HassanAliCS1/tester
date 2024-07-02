@@ -32,7 +32,7 @@ class QuranTesterServiceTest {
     }
 
     @Test
-    void getAyah(){
+    void getRandomAyah(){
         when(quranCloudService.getAyah(any(String.class))).thenReturn(Mono.just(getAyahResponseDTO()));
 
         StepVerifier.create(svc.getRandomAyah(30))
@@ -42,6 +42,36 @@ class QuranTesterServiceTest {
         verify(quranCloudService, times(1)).getAyah(argThat(ayahNumber -> {
             int num = Integer.parseInt(ayahNumber);
             return num >= 5673 && num <= 6236;
+        }));
+
+    }
+
+    @Test
+    void getRandomAyahMultipleJuz(){
+        when(quranCloudService.getAyah(any(String.class))).thenReturn(Mono.just(getAyahResponseDTO()));
+
+        StepVerifier.create(svc.getRandomAyahMultipleJuz(new int []{27,28,29,30}))
+                .expectNext(getAyahResponseDTO())
+                .verifyComplete();
+
+        verify(quranCloudService, times(1)).getAyah(argThat(ayahNumber -> {
+            int num = Integer.parseInt(ayahNumber);
+            return num >= 4706 && num <= 6236;
+        }));
+
+    }
+
+    @Test
+    void getSpecificAyah(){
+        when(quranCloudService.getAyah(any(String.class))).thenReturn(Mono.just(getAyahResponseDTO()));
+
+        StepVerifier.create(svc.getSpecificAyah(5710))
+                .expectNext(getAyahResponseDTO())
+                .verifyComplete();
+
+        verify(quranCloudService, times(1)).getAyah(argThat(ayahNumber -> {
+            int num = Integer.parseInt(ayahNumber);
+            return num == 5710;
         }));
 
     }
