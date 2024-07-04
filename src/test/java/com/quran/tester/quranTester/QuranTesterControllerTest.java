@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
 
-@WebFluxTest(controllers = QuranTesterController.class)
+@WebFluxTest
 @AutoConfigureWebTestClient(timeout = "60000")
 @Import({ SecurityConfig.class, TracingConfig.class })
 class QuranTesterControllerTest {
@@ -28,20 +28,57 @@ class QuranTesterControllerTest {
     private QuranTesterService svc;
 
     @Test
-    void getAyah(){
+    void getRandomAyah(){
         var data = new AyahDataDTO(1, "None", null,"None", null,null,1,1,1,1,1,1,false);
         var expectedResponse = new AyahResponseDTO(200,"OK", data);
 
-        when(svc.getAyah(any(Integer.class))).thenReturn(Mono.just(expectedResponse));
+        when(svc.getRandomAyah(30)).thenReturn(Mono.just(expectedResponse));
 
         client.get()
-                .uri("/quran-tester/get-ayah?juzNumber=30")
+                .uri("/quran-tester/get-random-ayah?juzNumber=30")
                 .exchange()
                 .expectBody(AyahResponseDTO.class)
                 .isEqualTo(expectedResponse);
 
-        verify(svc, times(1)).getAyah(any(Integer.class));
-        verifyGet("/quran-tester/get-ayah?juzNumber=30");
+        verify(svc, times(1)).getRandomAyah(30);
+        verifyGet("/quran-tester/get-random-ayah?juzNumber=30");
+
+    }
+
+    @Test
+    void getAyahMultipleJuz(){
+        var data = new AyahDataDTO(1, "None", null,"None", null,null,1,1,1,1,1,1,false);
+        var expectedResponse = new AyahResponseDTO(200,"OK", data);
+        int[] param = new int[]{27,28,29,30};
+
+        when(svc.getRandomAyahMultipleJuz(param)).thenReturn(Mono.just(expectedResponse));
+
+        client.get()
+                .uri("/quran-tester/get-ayah-multiple-juz?juzNumbers=27,28,29,30")
+                .exchange()
+                .expectBody(AyahResponseDTO.class)
+                .isEqualTo(expectedResponse);
+
+        verify(svc, times(1)).getRandomAyahMultipleJuz(param);
+        verifyGet("/quran-tester/get-ayah-multiple-juz?juzNumbers=27,28,29,30");
+
+    }
+
+    @Test
+    void getSpecificAyah(){
+        var data = new AyahDataDTO(1, "None", null,"None", null,null,1,1,1,1,1,1,false);
+        var expectedResponse = new AyahResponseDTO(200,"OK", data);
+
+        when(svc.getSpecificAyah(1)).thenReturn(Mono.just(expectedResponse));
+
+        client.get()
+                .uri("/quran-tester/get-specific-ayah?ayahNumber=1")
+                .exchange()
+                .expectBody(AyahResponseDTO.class)
+                .isEqualTo(expectedResponse);
+
+        verify(svc, times(1)).getSpecificAyah(1);
+        verifyGet("/quran-tester/get-specific-ayah?ayahNumber=1");
 
     }
 

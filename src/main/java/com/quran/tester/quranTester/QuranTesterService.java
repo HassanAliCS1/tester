@@ -4,5 +4,7 @@ import com.quran.tester.quranTester.quranCloud.dto.AyahResponseDTO;
 import reactor.core.publisher.Mono;
 
 public interface QuranTesterService {
-    Mono<AyahResponseDTO> getAyah(int juzNumber);
+    Mono<AyahResponseDTO> getRandomAyah(int juzNumber);
+    Mono<AyahResponseDTO> getRandomAyahMultipleJuz(int[] juzNumber);
+    Mono<AyahResponseDTO> getSpecificAyah(int ayahNumber);
 }
