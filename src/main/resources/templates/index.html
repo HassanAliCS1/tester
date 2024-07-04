@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Quran</title>
+        <link rel="stylesheet" th:href="@{../static/index.css}">
+    </head>
+    <body>
+        <main>
+            <h1>السلام عليكم</h1>
+            <form action="#" th:action="@{/quran-tester/get-random-ayah}" th:object="${juzNumber}" method="GET" >
+                <div class="">
+                    <label for="juzNumber" class="block text-sm font-medium leading-6 text-gray-900">Juz Number</label>
+                    <div class="mt-2">
+                        <input type="number" name="juzNumber" id="juzNumber" autocomplete="Juz Number" class=""/>
+                    </div>
+                </div>
+                <button type="submit" class="">GET AYAH</button>
+            </form>
+        </main>
+    </body>
+</html>
