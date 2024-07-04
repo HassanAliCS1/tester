@@ -45,6 +45,43 @@ class QuranTesterControllerTest {
 
     }
 
+    @Test
+    void getAyahMultipleJuz(){
+        var data = new AyahDataDTO(1, "None", null,"None", null,null,1,1,1,1,1,1,false);
+        var expectedResponse = new AyahResponseDTO(200,"OK", data);
+        int[] param = new int[]{27,28,29,30};
+
+        when(svc.getRandomAyahMultipleJuz(param)).thenReturn(Mono.just(expectedResponse));
+
+        client.get()
+                .uri("/quran-tester/get-ayah-multiple-juz?juzNumbers=27,28,29,30")
+                .exchange()
+                .expectBody(AyahResponseDTO.class)
+                .isEqualTo(expectedResponse);
+
+        verify(svc, times(1)).getRandomAyahMultipleJuz(param);
+        verifyGet("/quran-tester/get-ayah-multiple-juz?juzNumbers=27,28,29,30");
+
+    }
+
+    @Test
+    void getSpecificAyah(){
+        var data = new AyahDataDTO(1, "None", null,"None", null,null,1,1,1,1,1,1,false);
+        var expectedResponse = new AyahResponseDTO(200,"OK", data);
+
+        when(svc.getSpecificAyah(1)).thenReturn(Mono.just(expectedResponse));
+
+        client.get()
+                .uri("/quran-tester/get-specific-ayah?ayahNumber=1")
+                .exchange()
+                .expectBody(AyahResponseDTO.class)
+                .isEqualTo(expectedResponse);
+
+        verify(svc, times(1)).getSpecificAyah(1);
+        verifyGet("/quran-tester/get-specific-ayah?ayahNumber=1");
+
+    }
+
 
     protected void verifyGet(String uri) {
         client

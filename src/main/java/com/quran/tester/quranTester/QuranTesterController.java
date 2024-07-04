@@ -3,13 +3,11 @@ package com.quran.tester.quranTester;
 import com.quran.tester.quranTester.quranCloud.dto.AyahResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,21 +23,21 @@ public class QuranTesterController {
 
     @GetMapping("/get-random-ayah")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<AyahResponseDTO> getRandomAyah(int juzNumber){
+    public Mono<AyahResponseDTO> getRandomAyah(@RequestParam(name="juzNumber")int juzNumber){
         log.warn("QuranTesterController hit getRandomAyah: "+ juzNumber);
         return svc.getRandomAyah(juzNumber);
     }
 
     @GetMapping("/get-ayah-multiple-juz")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<AyahResponseDTO> getAyahMultipleJuz(int[] juzNumber){
+    public Mono<AyahResponseDTO> getAyahMultipleJuz(@RequestParam(name="juzNumbers") int[] juzNumber){
         log.warn("QuranTesterController hit getAyahMultipleJuz: "+ Arrays.toString(juzNumber));
         return svc.getRandomAyahMultipleJuz(juzNumber);
     }
 
     @GetMapping("/get-specific-ayah")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<AyahResponseDTO> getSpecificAyah(int ayahNumber){
+    public Mono<AyahResponseDTO> getSpecificAyah(@RequestParam(name="ayahNumber")int ayahNumber){
         log.warn("QuranTesterController hit getSpecificAyah: "+ ayahNumber);
         return svc.getSpecificAyah(ayahNumber);
     }
